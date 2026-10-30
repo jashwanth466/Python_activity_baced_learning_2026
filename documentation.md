@@ -1,24 +1,24 @@
-# Case Study 13: ATM Transaction Sequence Simulation
+# Case Study 17: Student Performance Trend Analysis
 
 ## 1. Problem Statement
-Process a sequence of deposits and withdrawals, maintain a simulated balance, enforce a per-withdrawal limit, reject invalid transactions, and produce a transaction summary.
+Compare scores across multiple examinations, calculate improvements or declines, identify weak subjects, and classify performance using supplied thresholds.
 
 ## 2. Objectives
-- Maintain a running account balance.
-- Validate transaction amounts and withdrawal limits.
-- Summarize accepted and rejected transactions.
+- Calculate score changes between exams.
+- Find the lowest-scoring subject.
+- Assign a performance category using defined rules.
 
 ## 3. Assumptions
-- Opening balance is non-negative.
-- Transactions are entered as D amount or W amount.
-- A withdrawal cannot exceed the current balance or the per-transaction limit.
+- Each subject has a score from 0 to 100 for both examinations.
+- A score change is latest score minus previous score.
+- Average >= 75 is High, >= 50 is Moderate, otherwise Needs Improvement.
 
 ## 4. Algorithm
-1. Read opening balance and withdrawal limit.
-2. Process each transaction in order.
-3. Accept a deposit if its amount is positive.
-4. Accept a withdrawal only if its amount is positive, within the limit, and no greater than the balance.
-5. Record each result and print the final summary.
+1. Read subject names and two scores for each subject.
+2. Validate scores from 0 to 100.
+3. Calculate change and average latest score.
+4. Identify the subject with the lowest latest score.
+5. Classify the average and display the report.
 
 ## 5. Flowchart
 ```mermaid
@@ -32,15 +32,16 @@ flowchart TD
 
 ## 6. Pseudocode
 ```text
-INPUT balance, limit, n
-accepted = 0; rejected = 0
-REPEAT n times:
-    INPUT type, amount
-    IF amount <= 0: reject
-    ELSE IF type is D: balance = balance + amount; accept
-    ELSE IF type is W AND amount <= limit AND amount <= balance: balance = balance - amount; accept
-    ELSE: reject
-PRINT balance, accepted, rejected
+INPUT subject count
+FOR each subject: INPUT name, previous, latest
+    change = latest - previous
+    store latest score
+average = sum(latest scores) / count
+weakest = subject with minimum latest score
+IF average >= 75: category = High
+ELSE IF average >= 50: category = Moderate
+ELSE: category = Needs Improvement
+PRINT each change, average, weakest, category
 ```
 
 ## 7. Python Source Code
@@ -49,12 +50,12 @@ See [`program.py`](program.py).
 ## 8. Test Cases
 | Test input / condition | Expected result |
 |---|---|
-| 1000; limit 500; D 200, W 300 | Final balance 900; 2 accepted, 0 rejected |
-| 100; limit 80; W 120 | Final balance 100; 0 accepted, 1 rejected |
-| 500; limit 200; W 100, W 450 | Final balance 400; 1 accepted, 1 rejected |
+| Math 60->80; English 70->75 | Math +20, English +5; average 77.5; High |
+| Math 40->45; English 50->45 | average 45; Needs Improvement |
+| Math 65->65 | change 0; Unchanged |
 
 ## 9. Sample Output
 The `output_screenshot.png` file in this folder is a sample terminal-style output illustration. Run `program.py` with the test input to verify the actual output on your system.
 
 ## 10. Conclusion
-The program simulates ATM transactions using a running balance and validates each transaction before updating the account.
+The analysis reports subject-wise trends and gives a simple overall classification from the latest scores.

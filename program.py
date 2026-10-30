@@ -1,35 +1,30 @@
 def main():
-    balance = float(input("Opening balance: "))
-    limit = float(input("Maximum withdrawal per transaction: "))
-    n = int(input("Number of transactions: "))
-    accepted = rejected = 0
-    history = []
+    n = int(input("Number of subjects: "))
+    records = []
+    latest_scores = []
 
     for i in range(n):
-        kind, amount_text = input(f"Transaction {i + 1} (D/W amount): ").split()
-        amount = float(amount_text)
-        kind = kind.upper()
-        if amount <= 0:
-            result = "REJECTED: amount must be positive"
-            rejected += 1
-        elif kind == "D":
-            balance += amount
-            result = "ACCEPTED: deposit"
-            accepted += 1
-        elif kind == "W" and amount <= limit and amount <= balance:
-            balance -= amount
-            result = "ACCEPTED: withdrawal"
-            accepted += 1
-        else:
-            result = "REJECTED: invalid type, limit, or insufficient balance"
-            rejected += 1
-        history.append((kind, amount, result, balance))
+        name = input(f"Subject {i + 1} name: ")
+        previous = float(input("Previous exam score (0-100): "))
+        latest = float(input("Latest exam score (0-100): "))
+        if not (0 <= previous <= 100 and 0 <= latest <= 100):
+            print("Scores must be between 0 and 100.")
+            return
+        records.append((name, previous, latest))
+        latest_scores.append(latest)
 
-    print("\nTRANSACTION SUMMARY")
-    for i, (kind, amount, result, current) in enumerate(history, 1):
-        print(f"{i}. {kind} {amount:.2f} - {result}; balance={current:.2f}")
-    print(f"Final balance: {balance:.2f}")
-    print(f"Accepted: {accepted} | Rejected: {rejected}")
+    print("\nPERFORMANCE TREND")
+    for name, previous, latest in records:
+        change = latest - previous
+        label = "Improved" if change > 0 else "Declined" if change < 0 else "Unchanged"
+        print(f"{name}: {previous:.1f} -> {latest:.1f} ({change:+.1f}, {label})")
+
+    average = sum(latest_scores) / n if n else 0
+    weakest = records[latest_scores.index(min(latest_scores))][0] if n else "N/A"
+    category = "High" if average >= 75 else "Moderate" if average >= 50 else "Needs Improvement"
+    print(f"Latest average: {average:.2f}")
+    print(f"Weakest subject: {weakest}")
+    print(f"Classification: {category}")
 
 if __name__ == "__main__":
     main()
