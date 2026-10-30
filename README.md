@@ -1,4 +1,4 @@
-# Python_activity_baced_learning_2026
+# Python_activity_based_learning_2026
 VANTLA.JASHWANTH
 SEC:21
 ROLL:26001859
